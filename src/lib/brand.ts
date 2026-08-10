@@ -129,3 +129,10 @@ export function allDomainsFor(company: CompanyId): string[] {
       .map((entry) => entry.domain),
   ]
 }
+
+export function allAllowedDomains(): string[] {
+  const builtIn = COMPANY_IDS.flatMap((id) => BRANDS[id].emailDomains)
+  const extra = extraDomains().map((e) => e.domain)
+  return Array.from(new Set([...builtIn, ...extra]))
+}
+

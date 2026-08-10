@@ -52,15 +52,6 @@ export async function POST(request: Request) {
     )
   }
 
-  // A mismatch is almost always a mis-click on the first screen, so name the
-  // company we detected rather than just refusing.
-  if (isCompanyId(rawCompany) && rawCompany !== detected) {
-    return bad(
-      `${email} looks like a ${BRANDS[detected].legalName} address. Go back and choose ${BRANDS[detected].legalName}, or use your ${allDomainsFor(rawCompany)
-        .map((domain) => `@${domain}`)
-        .join(' / ')} address.`,
-    )
-  }
 
   if (await isRateLimited(email)) return tooMany()
 

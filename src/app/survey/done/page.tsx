@@ -24,18 +24,17 @@ export default async function DonePage() {
             Thank you — that&apos;s all submitted
           </h1>
           <p className="mt-3.5 text-[15px] leading-relaxed text-slate-700 sm:text-base">
-            Your answers have gone straight to {brand.manager.firstName}, encrypted,
+            Your answers have gone straight to Nigel &amp; Michael, encrypted,
             and won&apos;t be shared any more widely.
           </p>
 
           <div className="mt-6 rounded-lg border-l-4 border-orange bg-orange/5 py-3.5 pl-4 pr-4">
             <h2 className="text-[15px] font-semibold text-navy">One last thing</h2>
             <p className="mt-1.5 text-[14.5px] leading-relaxed text-slate-700">
-              Please book a 30-minute follow-up chat directly in{' '}
-              {brand.manager.firstName}&apos;s calendar so you can talk through your
-              answers and your goals.
+              Please book a 30-minute follow-up chat to talk through your answers and your goals.
             </p>
           </div>
+
 
           <p className="mt-6 text-sm leading-relaxed text-slate-500">
             If you want to change something, you can{' '}

@@ -58,7 +58,7 @@ export const SECTIONS: Section[] = [
       {
         id: 'purpose_description',
         kind: 'textarea',
-        label: 'In one sentence, how would you describe what {BRAND} does?',
+        label: 'In one sentence, how would you describe what the business does?',
         help: "There's no right answer — this just helps us understand how clearly our direction and purpose are landing.",
       },
       {
@@ -154,7 +154,7 @@ export const SECTIONS: Section[] = [
         id: 'urgent_flag',
         kind: 'textarea',
         label:
-          "Is there anything urgent you'd like to flag that you need to speak to {MANAGER} about as a priority?",
+          "Is there anything urgent you'd like to flag that you need to speak to Nigel & Michael or your manager about as a priority?",
         help: "Optional — leave blank if there's nothing pressing.",
       },
     ],
@@ -187,7 +187,7 @@ export const SECTIONS: Section[] = [
       {
         id: 'team_collaboration',
         kind: 'scale',
-        label: 'How well do teams across {BRAND} communicate and collaborate?',
+        label: 'How well do teams across the business communicate and collaborate?',
         required: true,
         chartable: true,
         low: 'Poorly',
@@ -249,7 +249,7 @@ export const SECTIONS: Section[] = [
         label:
           "Any constructive feedback you'd like to share with leadership about business direction, culture or day-to-day operations?",
         help:
-          "Remember this goes only to {MANAGER} — but if you'd rather raise something in person at your 1-on-1 instead of in writing, that's fine too.",
+          "Remember this goes only to Nigel & Michael — but if you'd rather raise something in person at your 1-on-1 instead of in writing, that's fine too.",
       },
       {
         id: 'recognition',
@@ -305,7 +305,7 @@ export const SECTIONS: Section[] = [
       {
         id: 'what_you_like',
         kind: 'textarea',
-        label: 'What do you like about working at {BRAND}?',
+        label: 'What do you like about working here?',
       },
       {
         id: 'travel',
@@ -325,7 +325,7 @@ export const SECTIONS: Section[] = [
         id: 'nps',
         kind: 'nps',
         label:
-          'On a scale of 0–10, how likely are you to recommend {BRAND} to a friend or colleague as a good place to work?',
+          'On a scale of 0–10, how likely are you to recommend working here to a friend or colleague as a good place to work?',
         required: true,
         chartable: true,
         low: 'Not at all likely',
@@ -364,9 +364,10 @@ export const SECTIONS: Section[] = [
         required: true,
         chartable: true,
         choices: [
-          { value: 'manager', label: '{MANAGER}' },
-          { value: 'other_manager', label: '{OTHER_MANAGER}' },
-          { value: 'either', label: 'Either / no preference' },
+          { value: 'nigel', label: 'Nigel' },
+          { value: 'michael', label: 'Michael' },
+          { value: 'both', label: 'Nigel & Michael' },
+          { value: 'either', label: 'Direct line manager / Either' },
         ],
       },
     ],
@@ -380,12 +381,14 @@ export const QUESTIONS_BY_ID: Record<string, Question> = Object.fromEntries(
 )
 
 /** Substitute the brand placeholders in any question or option label. */
-export function fill(template: string, brand: Brand): string {
+export function fill(template: string, brand?: Brand): string {
+  const brandName = brand ? brand.name : 'the business'
   return template
-    .replaceAll('{BRAND}', brand.name)
-    .replaceAll('{MANAGER}', brand.manager.firstName)
-    .replaceAll('{OTHER_MANAGER}', brand.otherManagerFirstName)
+    .replaceAll('{BRAND}', brandName)
+    .replaceAll('{MANAGER}', 'Nigel & Michael')
+    .replaceAll('{OTHER_MANAGER}', 'Nigel & Michael')
 }
+
 
 export const SCALE_VALUES = ['1', '2', '3', '4', '5'] as const
 export const NPS_VALUES = Array.from({ length: 11 }, (_, i) => String(i))

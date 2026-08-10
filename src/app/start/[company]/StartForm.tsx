@@ -10,7 +10,7 @@ export function StartForm({
   company,
   domains,
 }: {
-  company: CompanyId
+  company?: CompanyId
   domains: string[]
 }) {
   const router = useRouter()

@@ -97,10 +97,10 @@ export async function sendSurveyVerification(opts: {
 
   const body = `
     <p style="margin:0 0 14px;font-size:15px;line-height:1.65;color:#334155;">
-      Hi — thanks for taking the time to fill in the ${brand.legalName} staff check-in.
+      Hi — thanks for taking the time to fill in the Staff 360 Survey.
     </p>
     <p style="margin:0 0 14px;font-size:15px;line-height:1.65;color:#334155;">
-      Confirm your email address to open the survey. It takes about 10–15 minutes, and your answers go only to ${brand.manager.firstName}.
+      Confirm your email address to open the survey. It takes about 10–15 minutes, and your answers go only to Nigel &amp; Michael.
     </p>
     ${button(link, 'Open my survey', palette)}
     ${codeBlock(opts.code, palette)}
@@ -111,10 +111,10 @@ export async function sendSurveyVerification(opts: {
   const { error } = await client().emails.send({
     from: fromAddress(),
     to: opts.email,
-    subject: `Confirm your email to open the ${brand.legalName} staff check-in`,
+    subject: `Confirm your email to open the Staff 360 Survey`,
     html: shell(palette, 'Confirm your email address', body),
     text: [
-      `Confirm your email address to open the ${brand.legalName} staff check-in.`,
+      `Confirm your email address to open the Staff 360 Survey.`,
       '',
       link,
       '',
@@ -182,17 +182,17 @@ export async function sendSubmissionNotice(opts: {
 
   const body = `
     <p style="margin:0 0 14px;font-size:15px;line-height:1.65;color:#334155;">
-      <strong>${escapeHtml(opts.respondentName)}</strong> has ${verb} ${brand.legalName} staff check-in.
+      <strong>${escapeHtml(opts.respondentName)}</strong> has ${verb} Staff 360 Survey (${brand.legalName}).
     </p>
     ${button(`${baseUrl()}/results`, 'View in the dashboard', palette)}`
 
   try {
     await client().emails.send({
       from: fromAddress(),
-      to: brand.manager.email,
-      subject: `New staff check-in response — ${brand.legalName}`,
+      to: [BRANDS.portal.manager.email, BRANDS.synergy.manager.email],
+      subject: `New Staff 360 Survey response — ${opts.respondentName} (${brand.legalName})`,
       html: shell(palette, 'A new response has come in', body),
-      text: `${opts.respondentName} has ${verb} ${brand.legalName} staff check-in.\n\n${baseUrl()}/results`,
+      text: `${opts.respondentName} has ${verb} Staff 360 Survey (${brand.legalName}).\n\n${baseUrl()}/results`,
     })
   } catch {
     // A failed notification must never lose someone's submission.
