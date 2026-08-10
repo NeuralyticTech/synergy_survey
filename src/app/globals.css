@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Neutral defaults; <BrandShell> overrides these per company. */
+  --brand-navy: #1c2949;
+  --brand-orange: #f7941d;
+  --brand-navy-rgb: 28 41 73;
+  --brand-orange-rgb: 247 148 29;
+  --brand-font-heading: ui-sans-serif, system-ui, sans-serif;
+  --brand-font-body: ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--brand-font-body);
+    @apply bg-slate-50 text-slate-800 antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--brand-font-heading);
+    @apply font-bold tracking-tight;
+  }
+
+  /* Never hide focus: a lot of this form gets keyboard-driven. */
+  :focus-visible {
+    outline: 2px solid var(--brand-orange);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .field {
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3.5 py-3 text-base
+           text-slate-900 shadow-sm transition placeholder:text-slate-400
+           focus:border-orange focus:outline-none focus:ring-2 focus:ring-orange/30;
+  }
+
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-2 rounded-lg px-5 py-3
+           text-base font-semibold transition active:scale-[0.985]
+           disabled:pointer-events-none disabled:opacity-55;
+  }
+
+  .btn-primary {
+    @apply btn bg-orange text-white shadow-sm hover:brightness-95;
+  }
+
+  .btn-secondary {
+    @apply btn border border-slate-300 bg-white text-slate-700 hover:bg-slate-50;
+  }
+
+  .btn-navy {
+    @apply btn bg-navy text-white shadow-sm hover:brightness-125;
+  }
+
+  .card {
+    @apply rounded-xl border border-slate-200 bg-white shadow-card;
+  }
+
+  /* Sits between the label and the control on every question. */
+  .q-label {
+    @apply block text-[15px] font-semibold leading-snug text-navy sm:text-base;
+  }
+
+  .q-help {
+    @apply mt-1.5 text-[13.5px] leading-relaxed text-slate-500;
+  }
+}
+
+/* Tap targets stay comfortable on phones without inflating desktop. */
+@media (max-width: 640px) {
+  .field {
+    font-size: 16px; /* stops iOS Safari zooming on focus */
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
