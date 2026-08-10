@@ -41,7 +41,7 @@ const statements = splitStatements(schema)
 for (const statement of statements) {
   const label = statement.split('\n')[0].slice(0, 72)
   try {
-    await sql.query(statement)
+    await sql(statement)
     console.log(`  ok   ${label}`)
   } catch (error) {
     console.error(`  FAIL ${label}\n       ${error.message}`)
