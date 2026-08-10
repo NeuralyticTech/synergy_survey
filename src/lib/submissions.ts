@@ -83,3 +83,12 @@ export async function listSubmissions(): Promise<StoredSubmission[]> {
     }
   })
 }
+
+export async function deleteSubmission(id: string): Promise<boolean> {
+  const rows = (await sql()`
+    delete from submissions where id = ${id} returning id
+  `) as Array<{ id: string }>
+
+  return rows.length > 0
+}
+

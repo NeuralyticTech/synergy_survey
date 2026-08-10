@@ -1,6 +1,7 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { BRANDS, type CompanyId, getBrand } from '@/lib/brand'
 import { attentionFlags, summarise } from '@/lib/aggregate'
 import type { StoredSubmission } from '@/lib/submissions'
@@ -26,16 +27,27 @@ export function ResultsDashboard({
   viewerEmail: string
   submissions: SerialisedSubmission[]
 }) {
+  const router = useRouter()
+  const [submissionList, setSubmissionList] = useState<SerialisedSubmission[]>(submissions)
   const [company, setCompany] = useState<CompanyFilter>('all')
   const [personId, setPersonId] = useState<string>('all')
   const [tab, setTab] = useState<Tab>('overview')
 
+  useEffect(() => {
+    setSubmissionList(submissions)
+  }, [submissions])
+
+  const handleDeleteSubmission = (id: string) => {
+    setSubmissionList((prev) => prev.filter((s) => s.id !== id))
+    router.refresh()
+  }
+
   const byCompany = useMemo(
     () =>
       company === 'all'
-        ? submissions
-        : submissions.filter((s) => s.company === company),
-    [submissions, company],
+        ? submissionList
+        : submissionList.filter((s) => s.company === company),
+    [submissionList, company],
   )
 
   // The person filter is scoped to the selected company, so switching company
@@ -125,8 +137,8 @@ export function ResultsDashboard({
                     option === 'all' ? 'Both companies' : BRANDS[option].legalName
                   const count =
                     option === 'all'
-                      ? submissions.length
-                      : submissions.filter((s) => s.company === option).length
+                      ? submissionList.length
+                      : submissionList.filter((s) => s.company === option).length
                   return (
                     <button
                       key={option}
@@ -186,7 +198,7 @@ export function ResultsDashboard({
           </div>
         </div>
 
-        {submissions.length === 0 ? (
+        {submissionList.length === 0 ? (
           <EmptyState />
         ) : (
           <>
@@ -225,7 +237,7 @@ export function ResultsDashboard({
               ) : tab === 'comments' ? (
                 <Comments aggregate={aggregate} brandName={brandForLabels.name} />
               ) : (
-                <People submissions={filtered} />
+                <People submissions={filtered} onDelete={handleDeleteSubmission} />
               )}
             </div>
           </>
@@ -425,20 +437,59 @@ function Comments({
   )
 }
 
-function People({ submissions }: { submissions: SerialisedSubmission[] }) {
+function People({
+  submissions,
+  onDelete,
+}: {
+  submissions: SerialisedSubmission[]
+  onDelete: (id: string) => void
+}) {
   return (
     <div className="space-y-4">
       {submissions.map((submission) => (
-        <PersonCard key={submission.id} submission={submission} />
+        <PersonCard key={submission.id} submission={submission} onDelete={onDelete} />
       ))}
     </div>
   )
 }
 
-function PersonCard({ submission }: { submission: SerialisedSubmission }) {
+function PersonCard({
+  submission,
+  onDelete,
+}: {
+  submission: SerialisedSubmission
+  onDelete: (id: string) => void
+}) {
   const [open, setOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
+
   const brand = getBrand(submission.company)
   const flags = attentionFlags(submission.answers)
+
+  const performDelete = async () => {
+    setIsDeleting(true)
+    setDeleteError(null)
+    try {
+      const res = await fetch('/api/results/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: submission.id }),
+      })
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data.error || 'Failed to delete submission.')
+      }
+
+      onDelete(submission.id)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to delete submission.'
+      setDeleteError(message)
+      setIsDeleting(false)
+    }
+  }
 
   return (
     <section className="card overflow-hidden">
@@ -521,6 +572,59 @@ function PersonCard({ submission }: { submission: SerialisedSubmission }) {
               </div>
             )
           })}
+
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-4">
+            {deleteError && (
+              <p className="text-xs font-medium text-rose-600">{deleteError}</p>
+            )}
+            {!confirmDelete ? (
+              <button
+                type="button"
+                onClick={() => setConfirmDelete(true)}
+                className="ml-auto flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-semibold text-rose-600 hover:bg-rose-50 hover:text-rose-700 transition"
+              >
+                <svg
+                  className="h-3.5 w-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+                Delete submission
+              </button>
+            ) : (
+              <div className="ml-auto flex flex-wrap items-center gap-2 rounded-lg border border-rose-200 bg-rose-50 p-2">
+                <span className="text-xs font-medium text-rose-800">
+                  Delete this submission permanently?
+                </span>
+                <button
+                  type="button"
+                  onClick={performDelete}
+                  disabled={isDeleting}
+                  className="rounded bg-rose-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-rose-700 disabled:opacity-50 transition"
+                >
+                  {isDeleting ? 'Deleting...' : 'Yes, delete'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setConfirmDelete(false)
+                    setDeleteError(null)
+                  }}
+                  disabled={isDeleting}
+                  className="rounded bg-slate-200 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-300 disabled:opacity-50 transition"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </section>
