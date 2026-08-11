@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Feedback Survey — Quick Guide</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .header {
+            border-bottom: 3px solid #ee7522;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: #1c2949;
+        }
+        .tagline {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        h2 {
+            font-size: 18px;
+            color: #1c2949;
+            margin-top: 28px;
+            margin-bottom: 12px;
+        }
+        .highlight-box {
+            background: #fef3e2;
+            border-left: 4px solid #ee7522;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .steps {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+        .steps li {
+            counter-increment: step-counter;
+            padding-left: 40px;
+            margin-bottom: 16px;
+            position: relative;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+        .steps li:before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #ee7522;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .url-box {
+            background: #1c2949;
+            color: white;
+            padding: 16px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            word-break: break-all;
+            margin: 16px 0;
+            text-align: center;
+        }
+        .privacy-note {
+            background: #f0f9ff;
+            border-left: 4px solid #0284c7;
+            padding: 12px;
+            margin-top: 24px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #0c4a6e;
+            border-radius: 4px;
+        }
+        .timing {
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .footer {
+            margin-top: 32px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 12px;
+            color: #64748b;
+            text-align: center;
+        }
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Staff Feedback Survey</h1>
+            <p class="tagline">Your chance to share how you're feeling</p>
+        </div>
+
+        <div class="highlight-box">
+            <strong>✓ Your answers are private</strong><br>
+            Only your manager will read them. Nothing here puts your role at risk. This is a check-in, not a test.
+        </div>
+
+        <h2>How to Take the Survey</h2>
+        <ol class="steps">
+            <li><strong>Visit the survey link below</strong> on your phone or computer</li>
+            <li><strong>Pick your company</strong> (Portal Technology or Synergy)</li>
+            <li><strong>Enter your work email</strong> to verify it's really you</li>
+            <li><strong>Check your email</strong> for a 6-digit verification code</li>
+            <li><strong>Enter the code</strong> to unlock the survey</li>
+            <li><strong>Answer the questions</strong> (~15 minutes, be honest)</li>
+            <li><strong>Submit</strong> — you're done</li>
+        </ol>
+
+        <div class="url-box">
+            synergy-staff-survey.vercel.app
+        </div>
+
+        <h2>What to Expect</h2>
+        <p style="margin-bottom: 12px;">The survey covers:</p>
+        <ul style="margin-left: 20px; line-height: 2;">
+            <li>Your role and how you're getting on</li>
+            <li>Tools and support you need</li>
+            <li>How you feel about the culture</li>
+            <li>What's working well and what could improve</li>
+            <li>Your goals and where you want to go</li>
+        </ul>
+        <p style="margin-top: 12px; color: #64748b; font-size: 14px;">There are no right or wrong answers. We want to hear how you're <em>actually</em> feeling.</p>
+
+        <h2>Questions?</h2>
+        <p>One optional answer: if you'd rather discuss something in person instead of writing it down, just say so in your answer. You can raise it one-to-one with your manager instead.</p>
+
+        <div class="privacy-note">
+            <strong>Privacy:</strong> Your name stays on the survey so your manager can follow up with you personally. All responses are encrypted and locked until your manager logs in. No one else sees them.
+        </div>
+
+        <div class="footer">
+            <p>Questions? Ask your manager or team lead.</p>
+            <p style="margin-top: 8px;">Thank you for taking the time. Your feedback helps us improve.</p>
+        </div>
+    </div>
+</body>
+</html>
