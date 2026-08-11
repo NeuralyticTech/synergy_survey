@@ -1,6 +1,6 @@
 import 'server-only'
 import { Resend } from 'resend'
-import { BRANDS, type CompanyId, companyForEmail, getBrand } from './brand'
+import { BRANDS, type CompanyId, getBrand } from './brand'
 
 function baseUrl(): string {
   const explicit = process.env.APP_URL
@@ -37,10 +37,8 @@ function devDeliver(label: string, to: string, link: string, code: string): bool
   return true
 }
 
-function fromAddress(company?: CompanyId): string {
-  if (company === 'portal') return 'Staff Survey <noreply@portaltechnology.com.au>'
-  if (company === 'synergy') return 'Staff Survey <noreply@synergymanaged.com.au>'
-  return process.env.EMAIL_FROM ?? 'Staff Survey <noreply@portalsynergy.tech>'
+function fromAddress(): string {
+  return process.env.EMAIL_FROM ?? 'Staff Check-in <onboarding@resend.dev>'
 }
 
 interface Palette {
@@ -111,7 +109,7 @@ export async function sendSurveyVerification(opts: {
     </p>`
 
   const { error } = await client().emails.send({
-    from: fromAddress(opts.company),
+    from: fromAddress(),
     to: opts.email,
     subject: `Confirm your email to open the Staff 360 Survey`,
     html: shell(palette, 'Confirm your email address', body),
@@ -220,7 +218,7 @@ export async function sendSubmissionNotice(opts: {
 
   try {
     await client().emails.send({
-      from: fromAddress(opts.company),
+      from: fromAddress(),
       to: [BRANDS.portal.manager.email, BRANDS.synergy.manager.email],
       subject: `New Staff 360 Survey response — ${opts.respondentName} (${brand.legalName})`,
       html: shell(palette, 'A new response has come in', body),
