@@ -38,7 +38,7 @@ function devDeliver(label: string, to: string, link: string, code: string): bool
 }
 
 function fromAddress(): string {
-  return process.env.EMAIL_FROM ?? 'Staff Check-in <onboarding@resend.dev>'
+  return process.env.EMAIL_FROM ?? 'Staff Survey <noreply@portalsynergy.tech>'
 }
 
 interface Palette {
