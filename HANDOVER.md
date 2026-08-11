@@ -9,10 +9,9 @@ A confidential, encrypted survey for your team to give you feedback on their rol
 ## For Your Team
 
 1. **Share this link:** https://synergy-staff-survey.vercel.app/
-2. They pick their company (Portal or Synergy)
-3. Enter their work email to verify
-4. Fill out the survey (~15 minutes)
-5. Submit
+2. **Enter work email** to verify (Portal or Synergy domain)
+3. **Fill out the survey** (~15 minutes)
+4. **Submit**
 
 They'll get a verification code by email — just a 6-digit number to confirm it's really them.
 
