@@ -123,7 +123,22 @@ export async function sendSurveyVerification(opts: {
     ].join('\n'),
   })
 
-  if (error) throw new Error(`Resend rejected the message: ${error.message}`)
+  if (error) {
+    if (error.message?.includes('testing emails')) {
+      console.warn(
+        [
+          '',
+          `[Resend sandbox] Cannot email ${opts.email} — verify domain at resend.com/domains or use code below:`,
+          `      to:   ${opts.email}`,
+          `      link: ${link}`,
+          `      code: ${opts.code}`,
+          '',
+        ].join('\n'),
+      )
+      return
+    }
+    throw new Error(`Resend rejected the message: ${error.message}`)
+  }
 }
 
 export async function sendResultsVerification(opts: {
@@ -165,7 +180,22 @@ export async function sendResultsVerification(opts: {
     ].join('\n'),
   })
 
-  if (error) throw new Error(`Resend rejected the message: ${error.message}`)
+  if (error) {
+    if (error.message?.includes('testing emails')) {
+      console.warn(
+        [
+          '',
+          `[Resend sandbox] Cannot email ${opts.email} — verify domain at resend.com/domains or use code below:`,
+          `      to:   ${opts.email}`,
+          `      link: ${link}`,
+          `      code: ${opts.code}`,
+          '',
+        ].join('\n'),
+      )
+      return
+    }
+    throw new Error(`Resend rejected the message: ${error.message}`)
+  }
 }
 
 /** Nudge the reader when a response lands, so nothing sits unread. */
